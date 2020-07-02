@@ -1,3 +1,6 @@
+import 'package:armrci/widget/show_info_shop.dart';
+import 'package:armrci/widget/show_my_order_shop.dart';
+import 'package:armrci/widget/show_my_product.dart';
 import 'package:flutter/material.dart';
 
 class MainShop extends StatefulWidget {
@@ -6,6 +9,8 @@ class MainShop extends StatefulWidget {
 }
 
 class _MainShopState extends State<MainShop> {
+  Widget currentwidget = ShowMyOrderShop();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,6 +18,7 @@ class _MainShopState extends State<MainShop> {
       appBar: AppBar(
         title: Text('Welcome Shop'),
       ),
+      body: currentwidget,
     );
   }
 
@@ -35,6 +41,9 @@ class _MainShopState extends State<MainShop> {
         subtitle: Text('ดูรายการสั่งของ'),
         onTap: () {
           Navigator.pop(context);
+          setState(() {
+            currentwidget = ShowMyOrderShop();
+          });
         },
       );
 
@@ -44,6 +53,9 @@ class _MainShopState extends State<MainShop> {
         subtitle: Text('ดูรายการสินค้า'),
         onTap: () {
           Navigator.pop(context);
+          setState(() {
+            currentwidget = ShowMyProduct();
+          });
         },
       );
 
@@ -53,6 +65,9 @@ class _MainShopState extends State<MainShop> {
         subtitle: Text('ดูรายละเอียดร้าน'),
         onTap: () {
           Navigator.pop(context);
+          setState(() {
+            currentwidget = ShowInfoShop();
+          });
         },
       );
 }
