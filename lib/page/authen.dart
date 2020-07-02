@@ -6,6 +6,7 @@ import 'package:armrci/utility/my_api.dart';
 import 'package:armrci/utility/my_style.dart';
 import 'package:armrci/utility/normal_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Authen extends StatefulWidget {
   @override
@@ -103,10 +104,10 @@ class _AuthenState extends State<Authen> {
       if (password == model.password) {
         switch (model.type) {
           case 'User':
-            routeTo(MainUser());
+            routeTo(MainUser(),model);
             break;
           case 'Shop':
-            routeTo(MainShop());
+            routeTo(MainShop(),model);
             break;
           default:
         }
@@ -116,7 +117,13 @@ class _AuthenState extends State<Authen> {
     }
   }
 
-  void routeTo(Widget widget) {
+  Future<Null> routeTo(Widget widget,UserModel model) async {
+
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString('id', model.id);
+    preferences.setString('Name', model.name);
+    preferences.setString('Type', model.type);
+
     MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => widget,
     );
