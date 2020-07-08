@@ -1,7 +1,10 @@
+import 'package:armrci/utility/my_constant.dart';
 import 'package:armrci/utility/my_style.dart';
 import 'package:armrci/utility/normal_dialog.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddInfoShop extends StatefulWidget {
   @override
@@ -9,7 +12,7 @@ class AddInfoShop extends StatefulWidget {
 }
 
 class _AddInfoShopState extends State<AddInfoShop> {
-  String dateTimeString, gender, educateString, address, phone;
+  String dateTimeString, gender, educateString, address, phone, id;
   List<String> educates = [
     'ต่ำกว่า ป.6',
     'มัธยมต้น',
@@ -22,7 +25,13 @@ class _AddInfoShopState extends State<AddInfoShop> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    findId();
     findCurrentTime();
+  }
+
+  Future<Null> findId() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    id=preferences.getString('id');
   }
 
   Future<Null> findCurrentTime() async {
@@ -46,7 +55,9 @@ class _AddInfoShopState extends State<AddInfoShop> {
             normalDialog(context, 'กรุณาเลือกเพศ');
           } else if (educateString == null) {
             normalDialog(context, 'กรุณาเลือกการศึกษา');
-          } else {}
+          } else {
+            editValueOnMySQL();
+          }
         },
         child: Icon(Icons.cloud_upload),
       ),
@@ -159,4 +170,18 @@ class _AddInfoShopState extends State<AddInfoShop> {
           decoration: MyStyle().myInputDecoration('เบอร์โทรศัพท์ :'),
         ),
       );
+
+  Future<Null> editValueOnMySQL() async {
+    String url =
+        '${MyConstant().domain}/RCI/editUserWhereIdArm.php?id=$id&isAdd=true&CreatDate=$dateTimeString&Address=$address&Phone=$phone&Gendel=$gender&Education=$educateString';
+        await Dio().get(url).then((value)  {
+          print('id= $id  value=${value.toString()}');
+          if (value.toString() == 'true') {
+            Navigator.pop(context);
+            
+          } else {
+            normalDialog(context, 'Please Try again');
+          }
+        });
+  }
 }
