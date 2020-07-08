@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 class MyStyle {
   Color mainColor = Colors.pink;
   Color darkColor = Colors.blue.shade800;
+  Widget showProgress(){
+    return Center(child: CircularProgressIndicator(),);
+  }
 
   InputDecoration myInputDecoration(String string) {
     return InputDecoration(

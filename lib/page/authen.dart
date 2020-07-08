@@ -15,25 +15,64 @@ class Authen extends StatefulWidget {
 
 class _AuthenState extends State<Authen> {
   String user, password;
+  bool status = true;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    findLogin();
+  }
+
+  Future<Null> findLogin() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    String typeLogin = preferences.getString('Type');
+    print('typeLogin = $typeLogin');
+
+    if (typeLogin == null || typeLogin.isEmpty) {
+      setState(() {
+        status = false;
+      });
+    } else {
+      switch (typeLogin) {
+        case 'User':
+          routeToService(MainUser());
+          break;
+        case 'Shop':
+         routeToService(MainShop());
+          break;
+        default:
+      }
+    }
+  }
+
+  void routeToService(Widget widget) {
+     MaterialPageRoute route = MaterialPageRoute(
+      builder: (context) => MainShop(),
+    );
+    Navigator.pushAndRemoveUntil(context, route, (route) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              MyStyle().showlogo(),
-              MyStyle().showTextH1('Royal Can'),
-              userForm(),
-              passwordForm(),
-              loginButton(),
-              registerButton(),
-            ],
-          ),
-        ),
-      ),
+      body: status
+          ? MyStyle().showProgress()
+          : Center(
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    MyStyle().showlogo(),
+                    MyStyle().showTextH1('Royal Can'),
+                    userForm(),
+                    passwordForm(),
+                    loginButton(),
+                    registerButton(),
+                  ],
+                ),
+              ),
+            ),
     );
   }
 
@@ -104,10 +143,10 @@ class _AuthenState extends State<Authen> {
       if (password == model.password) {
         switch (model.type) {
           case 'User':
-            routeTo(MainUser(),model);
+            routeTo(MainUser(), model);
             break;
           case 'Shop':
-            routeTo(MainShop(),model);
+            routeTo(MainShop(), model);
             break;
           default:
         }
@@ -117,8 +156,7 @@ class _AuthenState extends State<Authen> {
     }
   }
 
-  Future<Null> routeTo(Widget widget,UserModel model) async {
-
+  Future<Null> routeTo(Widget widget, UserModel model) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString('id', model.id);
     preferences.setString('Name', model.name);
