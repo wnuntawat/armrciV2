@@ -1,3 +1,4 @@
+import 'package:armrci/utility/my_style.dart';
 import 'package:armrci/widget/show_info_shop.dart';
 import 'package:armrci/widget/show_my_order_shop.dart';
 import 'package:armrci/widget/show_my_product.dart';
@@ -40,12 +41,16 @@ Future<Null> findShop() async{
 
   Drawer showDrawer() {
     return Drawer(
-      child: Column(
+      child: Stack(
         children: <Widget>[
-          UserAccountsDrawerHeader(accountName: null, accountEmail: null),
-          menuMyorder(),
-          menuMyProduct(),
-          menuMyInformation(),
+          Column(
+            children: <Widget>[
+              UserAccountsDrawerHeader(accountName: null, accountEmail: null),
+              menuMyorder(),
+              menuMyProduct(),
+              menuMyInformation(),
+            ],
+          ),MyStyle().menuSignOut(context),
         ],
       ),
     );

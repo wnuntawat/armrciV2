@@ -1,27 +1,39 @@
+
+
+import 'package:armrci/page/add_info_shop.dart';
 import 'package:flutter/material.dart';
 
 class ShowInfoShop extends StatefulWidget {
   final String idShop;
-  ShowInfoShop({Key key,this.idShop});
+  ShowInfoShop({Key key, this.idShop});
   @override
   _ShowInfoShopState createState() => _ShowInfoShopState();
 }
 
 class _ShowInfoShopState extends State<ShowInfoShop> {
-String idShop;
-@override
+  String idShop;
+  @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-idShop =widget.idShop;
-
+    idShop = widget.idShop;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Text('This is Infomation of id = $idShop'
-      
-    );
+    return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            MaterialPageRoute route = MaterialPageRoute(
+              builder: (context) => AddInfoShop(),
+            );
+            Navigator.push(context, route).then((value) => null);
+          },
+          child: Icon(Icons.add),
+        ),
+        body: Text(
+          'This is Infomation of id = $idShop',
+        ));
   }
 }

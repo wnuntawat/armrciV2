@@ -1,3 +1,4 @@
+import 'package:armrci/utility/my_style.dart';
 import 'package:flutter/material.dart';
 
 class MainUser extends StatefulWidget {
@@ -9,7 +10,14 @@ class _MainUserState extends State<MainUser> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text('Welcome User'),),
+      drawer: Drawer(
+        child: MyStyle().menuSignOut(context),
+      ),
+      appBar: AppBar(
+        title: Text('Welcome User'),
+      ),
     );
   }
+
+  
 }
