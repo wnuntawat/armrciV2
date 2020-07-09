@@ -40,9 +40,35 @@ class _EditInfoShopState extends State<EditInfoShop> {
       appBar: AppBar(
         title: Text('Edit info'),
       ),
-      body: Column(
-        children: <Widget>[MyStyle().showTextH2('DateTime = $dateTimeString')],
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            showDate(),
+            addressForm(),
+            phoneForm()
+          ],
+        ),
       ),
     );
   }
+
+  Widget addressForm() => Container(
+        margin: EdgeInsets.only(top: 16),
+        width: 300,
+        child: TextFormField(
+          initialValue: address,
+          decoration: MyStyle().myInputDecoration('Address'),
+        ),
+      );
+
+  Widget phoneForm() => Container(
+        margin: EdgeInsets.only(top: 16),
+        width: 300,
+        child: TextFormField(
+          initialValue: phone,
+          decoration: MyStyle().myInputDecoration('Phone'),
+        ),
+      );
+
+  Widget showDate() => MyStyle().showTextH2('DateTime = $dateTimeString');
 }
