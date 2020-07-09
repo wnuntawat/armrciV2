@@ -46,9 +46,9 @@ class MyStyle {
   Text showTextH1(String string) => Text(
         string,
         style: TextStyle(
-          fontSize: 24,
+          fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: darkColor,
+          color:Colors.black,
         ),
       );
 
@@ -56,9 +56,9 @@ class MyStyle {
         child: Text(
           string,
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: darkColor,
+            color: Colors.black,
           ),
         ),
       );

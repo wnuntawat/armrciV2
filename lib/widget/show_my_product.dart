@@ -77,7 +77,8 @@ class _ShowMyProductState extends State<ShowMyProduct> {
                       itemCount: productModels.length,
                       itemBuilder: (context, index) => Row(
                         children: <Widget>[
-                          Container(padding: EdgeInsets.all(8),
+                          Container(
+                            padding: EdgeInsets.all(8),
                             width: MediaQuery.of(context).size.width * 0.5,
                             height: MediaQuery.of(context).size.width * 0.4,
                             child: Image.network(
@@ -85,7 +86,21 @@ class _ShowMyProductState extends State<ShowMyProduct> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          Text(productModels[index].name),
+                          Container(
+                            width: MediaQuery.of(context).size.width * 0.5,
+                            height: MediaQuery.of(context).size.width * 0.4,
+                            child: Column(mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                Row(mainAxisAlignment: MainAxisAlignment.start,
+                                  children: <Widget>[
+                                    MyStyle().showTextH2(productModels[index].name),
+                                  ],
+                                ),
+                                 MyStyle().showTextH1('ราคา ${productModels[index].price} บาท'),
+                                 MyStyle().showTextH2(productModels[index].detail),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
