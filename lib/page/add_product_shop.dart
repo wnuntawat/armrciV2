@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:armrci/utility/my_constant.dart';
 import 'package:armrci/utility/my_style.dart';
 import 'package:armrci/utility/normal_dialog.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,96 +48,116 @@ class _AddProductShopState extends State<AddProductShop> {
             normalDialog(context, 'Please Fill blank');
           } else {
             uploadAndInsertProduct();
-                      }
-                    },
-                    child: Icon(Icons.cloud_upload),
-                  ),
-                  appBar: AppBar(
-                    title: Text('AddProduct'),
-                  ),
-                  body: Center(
-                    child: SingleChildScrollView(
-                              child: Column(
-                        children: <Widget>[
-                          imageGroup(),
-                          nameForm(),
-                          priceForm(),
-                          detailForm()
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }
-            
-              Widget nameForm() => Container(
-                    width: 250,
-                    margin: EdgeInsets.only(top: 16),
-                    child: TextField(
-                      onChanged: (value) => name = value.trim(),
-                      decoration: MyStyle().myInputDecoration('Name Product'),
-                    ),
-                  );
-            
-              Widget priceForm() => Container(
-                    width: 250,
-                    margin: EdgeInsets.only(top: 16),
-                    child: TextField(
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) => price = value.trim(),
-                      decoration: MyStyle().myInputDecoration('Price Product'),
-                    ),
-                  );
-            
-              Widget detailForm() => Container(
-                    width: 250,
-                    margin: EdgeInsets.only(top: 16),
-                    child: TextField(
-                      onChanged: (value) => detail = value.trim(),
-                      decoration: MyStyle().myInputDecoration('Detail Product'),
-                    ),
-                  );
-            
-              Future<Null> chooseSource(ImageSource source) async {
-                try {
-                  var object = await ImagePicker().getImage(
-                    source: source,
-                    maxWidth: 800,
-                    maxHeight: 800,
-                  );
-                  setState(() {
-                    file = File(object.path);
-                  });
-                } catch (e) {}
-              }
-            
-              Widget imageGroup() => Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      IconButton(
-                        icon: Icon(Icons.add_a_photo),
-                        onPressed: () => chooseSource(ImageSource.camera),
-                      ),
-                      Container(
-                        padding: EdgeInsets.all(16),
-                        width: 200,
-                        height: 200,
-                        child:
-                            file == null ? Image.asset('images/pic.png') : Image.file(file),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.add_photo_alternate),
-                        onPressed: () => chooseSource(ImageSource.gallery),
-                      ),
-                    ],
-                  );
-            
-            Future<Null> uploadAndInsertProduct() async {
-              Random random = Random();
-              int i = random.nextInt(100000);
-              String nameFile ='idShop${idShop}product$i.jpg';
-              print('nameFile = $nameFile');
-              code ='idShop${idShop}code$i';
-              print('code=$code');
-            }
+          }
+        },
+        child: Icon(Icons.cloud_upload),
+      ),
+      appBar: AppBar(
+        title: Text('AddProduct'),
+      ),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              imageGroup(),
+              nameForm(),
+              priceForm(),
+              detailForm()
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget nameForm() => Container(
+        width: 250,
+        margin: EdgeInsets.only(top: 16),
+        child: TextField(
+          onChanged: (value) => name = value.trim(),
+          decoration: MyStyle().myInputDecoration('Name Product'),
+        ),
+      );
+
+  Widget priceForm() => Container(
+        width: 250,
+        margin: EdgeInsets.only(top: 16),
+        child: TextField(
+          keyboardType: TextInputType.number,
+          onChanged: (value) => price = value.trim(),
+          decoration: MyStyle().myInputDecoration('Price Product'),
+        ),
+      );
+
+  Widget detailForm() => Container(
+        width: 250,
+        margin: EdgeInsets.only(top: 16),
+        child: TextField(
+          onChanged: (value) => detail = value.trim(),
+          decoration: MyStyle().myInputDecoration('Detail Product'),
+        ),
+      );
+
+  Future<Null> chooseSource(ImageSource source) async {
+    try {
+      var object = await ImagePicker().getImage(
+        source: source,
+        maxWidth: 800,
+        maxHeight: 800,
+      );
+      setState(() {
+        file = File(object.path);
+      });
+    } catch (e) {}
+  }
+
+  Widget imageGroup() => Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          IconButton(
+            icon: Icon(Icons.add_a_photo),
+            onPressed: () => chooseSource(ImageSource.camera),
+          ),
+          Container(
+            padding: EdgeInsets.all(16),
+            width: 200,
+            height: 200,
+            child:
+                file == null ? Image.asset('images/pic.png') : Image.file(file),
+          ),
+          IconButton(
+            icon: Icon(Icons.add_photo_alternate),
+            onPressed: () => chooseSource(ImageSource.gallery),
+          ),
+        ],
+      );
+
+  Future<Null> uploadAndInsertProduct() async {
+    Random random = Random();
+    int i = random.nextInt(100000);
+    String nameFile = 'idShop${idShop}product$i.jpg';
+    print('nameFile = $nameFile');
+    code = 'idShop${idShop}code$i';
+    print('code=$code');
+
+    try {
+      String urlUpload = '${MyConstant().domain}/RCI/saveFileArm.php';
+      Map<String, dynamic> map = Map();
+      map['file'] = await MultipartFile.fromFile(file.path, filename: nameFile);
+      FormData formData = FormData.fromMap(map);
+      await Dio().post(urlUpload, data: formData).then((value) async {
+        pathImage = '/RCI/Product/$nameFile';
+        print('Upload Success => pathImage = ${MyConstant().domain}$pathImage');
+
+      String urlInsert = 'https://6ca748081031.ngrok.io/RCI/addProductArm.php?isAdd=true&IdShop=$idShop&NameShop=$nameShop&Name=$name&Price=$price&Detail=$detail&PathImage=$pathImage&Code=$code';
+      await Dio().get(urlInsert).then((value) {
+        if (value.toString() == 'true') {
+          Navigator.pop(context);
+        } else {
+          normalDialog(context, 'Please Try Again');
+        }
+      });
+      });
+    } catch (e) {}
+  }
 }
