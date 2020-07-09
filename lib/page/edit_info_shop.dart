@@ -1,5 +1,8 @@
 import 'package:armrci/models/user_model.dart';
+import 'package:armrci/utility/my_api.dart';
+import 'package:armrci/utility/my_constant.dart';
 import 'package:armrci/utility/my_style.dart';
+import 'package:armrci/utility/normal_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -14,6 +17,7 @@ class EditInfoShop extends StatefulWidget {
 class _EditInfoShopState extends State<EditInfoShop> {
   UserModel userModel;
   String dateTimeString, gender, educateString, address, phone, id;
+  List<String> educates;
   @override
   void initState() {
     // TODO: implement initState
@@ -24,6 +28,7 @@ class _EditInfoShopState extends State<EditInfoShop> {
     address = userModel.address;
     phone = userModel.phone;
     id = userModel.id;
+    educates = MyConstant().educates;
     findCurrentTime();
   }
 
@@ -37,21 +42,55 @@ class _EditInfoShopState extends State<EditInfoShop> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          print(
+              'date => $dateTimeString,address => $address,phone = > $phone,gender => $gender,education => $educateString  ');
+          if (address.isEmpty || phone.isEmpty) {
+            normalDialog(context, 'Please Fill Every Blamk');
+          } else {
+            MyAPI().editValueOnMySQL(context, id, dateTimeString, address,
+                phone, gender, educateString);
+          }
+        },
+        child: Icon(Icons.cloud_upload),
+      ),
       appBar: AppBar(
         title: Text('Edit info'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             showDate(),
             addressForm(),
             phoneForm(),
             genderGroup(),
+            educationDropdown(),
           ],
         ),
       ),
     );
   }
+
+  Container educationDropdown() => Container(
+        width: 300,
+        child: DropdownButton<String>(
+          value: educateString,
+          items: educates
+              .map(
+                (e) => DropdownMenuItem(
+                  child: Text(e),
+                  value: e,
+                ),
+              )
+              .toList(),
+          onChanged: (value) {
+            setState(() {
+              educateString = value;
+            });
+          },
+        ),
+      );
 
   Container genderGroup() => Container(
         child: Row(
@@ -99,6 +138,7 @@ class _EditInfoShopState extends State<EditInfoShop> {
         margin: EdgeInsets.only(top: 16),
         width: 300,
         child: TextFormField(
+          onChanged: (value) => address = value.trim(),
           initialValue: address,
           decoration: MyStyle().myInputDecoration('Address'),
         ),
@@ -108,6 +148,7 @@ class _EditInfoShopState extends State<EditInfoShop> {
         margin: EdgeInsets.only(top: 16),
         width: 300,
         child: TextFormField(
+          onChanged: (value) => phone = value.trim(),
           initialValue: phone,
           decoration: MyStyle().myInputDecoration('Phone'),
         ),
