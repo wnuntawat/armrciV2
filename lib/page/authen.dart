@@ -27,7 +27,7 @@ class _AuthenState extends State<Authen> {
   Future<Null> findLogin() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String typeLogin = preferences.getString('Type');
-    print('typeLogin = $typeLogin');
+    print('typeLogin ====================== $typeLogin');
 
     if (typeLogin == null || typeLogin.isEmpty) {
       setState(() {
@@ -36,6 +36,7 @@ class _AuthenState extends State<Authen> {
     } else {
       switch (typeLogin) {
         case 'User':
+        print('work');
           routeToService(MainUser());
           break;
         case 'Shop':
@@ -48,7 +49,7 @@ class _AuthenState extends State<Authen> {
 
   void routeToService(Widget widget) {
      MaterialPageRoute route = MaterialPageRoute(
-      builder: (context) => MainShop(),
+      builder: (context) => widget,
     );
     Navigator.pushAndRemoveUntil(context, route, (route) => false);
   }
