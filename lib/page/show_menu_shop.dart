@@ -134,7 +134,7 @@ class _ShowMenuShopState extends State<ShowMenuShop> {
                       amount++;
                     });
                     print('amount = $amount');
-                    insertOrderToSqlite(index);
+                   
                   },
                 ),
                 Text('$amount'),
@@ -161,6 +161,7 @@ class _ShowMenuShopState extends State<ShowMenuShop> {
                   child: RaisedButton(
                     onPressed: () {
                       Navigator.pop(context);
+                       insertOrderToSqlite(index);
                     },
                     child: Text('Order'),
                   ),
@@ -198,6 +199,11 @@ class _ShowMenuShopState extends State<ShowMenuShop> {
     String sumString = sum.toString();
 
     print('idShop = $idshop,nameShop=$nameShop,idProduct = $idProduct,nameProduct = $nameProduct,amountString=$amountString,sumString=$sumString');
+
+
+
+
+
 
   }
 }
