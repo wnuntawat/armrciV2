@@ -58,4 +58,25 @@ class SQLiteHelper {
     }
     return sqliteModels;
   }
+
+  Future<Null> deleteDataWhereId(int idProduct) async {
+    Database database = await connectedDatabase();
+    try {
+      await database.delete(nameTable, where: '$column_id = $idProduct');
+    } catch (e) {
+      print('e DeleteData==>${e.toString()}');
+    }
+  }
+
+
+Future<Null> clearData() async {
+  Database database = await connectedDatabase();
+  try {
+     await database.delete(nameTable);
+    
+  } catch (e) {
+      print('e ClearData==>${e.toString()}');
+  }
+}
+
 }
