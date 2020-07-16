@@ -63,6 +63,30 @@ class MyStyle {
         ),
       );
 
+
+      Widget showTextH3(String string) => Container(
+        child: Text(
+          string,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.bold,
+            color: Colors.black,
+          ),
+        ),
+      );
+
+Widget showTextH3Red(String string) => Container(
+        child: Text(
+          string,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: Colors.red.shade900,
+          ),
+        ),
+      );
+
+
   Container showlogo() {
     return Container(
       width: 150,
