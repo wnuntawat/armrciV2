@@ -47,4 +47,15 @@ class SQLiteHelper {
       print('e insertData ==> ${e.toString()}');
     }
   }
+
+  Future<List<SqliteModel>> readDataFromSQLite() async {
+    Database database = await connectedDatabase();
+    List<SqliteModel> sqliteModels = List();
+    List<Map<String, dynamic>> listmap = await database.query(nameTable);
+    for (var map in listmap) {
+      SqliteModel model = SqliteModel.fromJson(map);
+      sqliteModels.add(model);
+    }
+    return sqliteModels;
+  }
 }

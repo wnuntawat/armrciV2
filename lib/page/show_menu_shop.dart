@@ -1,10 +1,13 @@
 import 'dart:convert';
 
 import 'package:armrci/models/product_model.dart';
+import 'package:armrci/models/sqlite_model.dart';
 import 'package:armrci/models/user_model.dart';
 import 'package:armrci/utility/my_constant.dart';
 import 'package:armrci/utility/my_style.dart';
 import 'package:armrci/utility/normal_dialog.dart';
+import 'package:armrci/utility/normal_toast.dart';
+import 'package:armrci/utility/sqlite_helper.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -134,7 +137,6 @@ class _ShowMenuShopState extends State<ShowMenuShop> {
                       amount++;
                     });
                     print('amount = $amount');
-                   
                   },
                 ),
                 Text('$amount'),
@@ -161,7 +163,7 @@ class _ShowMenuShopState extends State<ShowMenuShop> {
                   child: RaisedButton(
                     onPressed: () {
                       Navigator.pop(context);
-                       insertOrderToSqlite(index);
+                      insertOrderToSqlite(index);
                     },
                     child: Text('Order'),
                   ),
@@ -198,12 +200,38 @@ class _ShowMenuShopState extends State<ShowMenuShop> {
     int sum = int.parse(price.trim()) * amount;
     String sumString = sum.toString();
 
-    print('idShop = $idshop,nameShop=$nameShop,idProduct = $idProduct,nameProduct = $nameProduct,amountString=$amountString,sumString=$sumString');
+    print(
+        'idShop = $idshop,nameShop=$nameShop,idProduct = $idProduct,nameProduct = $nameProduct,amountString=$amountString,sumString=$sumString');
 
+    Map<String, dynamic> map = Map();
+    map['idShop'] = idshop;
+    map['nameShop'] = nameShop;
+    map['idProduct'] = idProduct;
+    map['nameProduct'] = nameProduct;
+    map['price'] = price;
+    map['amountString'] = amountString;
+    map['sumString'] = sumString;
 
+    SqliteModel sqliteModel = SqliteModel.fromJson(map);
 
+    List<SqliteModel> resultFromSQLite =
+        await SQLiteHelper().readDataFromSQLite();
+    print('resultFromSQLite length = ${resultFromSQLite.length}');
 
-
-
+    if (resultFromSQLite.length == 0) {
+      await SQLiteHelper().insertDataToSQLite(sqliteModel).then((value) {
+        normalToast('Add order Success');
+      });
+    } else {
+      String currentIdShop = resultFromSQLite[0].idShop;
+      print('currentIdShop==>$currentIdShop');
+      if (idshop == currentIdShop) {
+        await SQLiteHelper().insertDataToSQLite(sqliteModel).then((value) {
+        normalToast('Add order Success');
+      });
+      } else {
+        normalDialog(context, 'กรุณาซื้อของจากร้าน ${resultFromSQLite[0].nameShop} ครับ');
+      }
+    }
   }
 }
