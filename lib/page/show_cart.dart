@@ -1,9 +1,13 @@
 import 'package:armrci/models/sqlite_model.dart';
+import 'package:armrci/utility/my_constant.dart';
 import 'package:armrci/utility/my_style.dart';
 import 'package:armrci/utility/normal_toast.dart';
 import 'package:armrci/utility/sqlite_helper.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ShowCart extends StatefulWidget {
   @override
@@ -267,7 +271,10 @@ class _ShowCartState extends State<ShowCart> {
                    print('idUser==>$idUser,nameUser==>$nameUser,');
 
                 DateTime dateTime = DateTime.now();
-                String dateTimeString = dateTime.toString();
+
+
+
+                String dateTimeString = DateFormat('dd-MM-yyyy').format(dateTime);
                 print('dateTime==>$dateTimeString');
 
                 String idShop = sqliteModels[0].idShop;
@@ -306,7 +313,20 @@ class _ShowCartState extends State<ShowCart> {
                 print('amountString==>$amountString');
                 print('sumString==>$sumString');
 
-                
+                String urlMsSQL ='${MyConstant().domain}/RCI/insert_order_ung.php?isAdd=true&idUser=$idUser&nameUser=$nameUser&dateTimeOrder=$dateTimeString&idShop=$idShop&nameShop=$nameShop&idProduct=$idProductString&nameProduct=$nameProductString&price=$priceString&amount=$amountString&sum=$sumString';
+
+                await Dio().get(urlMsSQL).then((value) async {
+                  print('value ===> $value');
+                  if (value.toString() == 'true') {
+                    normalToast('Order Success');
+                    await SQLiteHelper().clearData().then((value) => Navigator.pop(context));
+                    
+
+                  } else {
+                    normalToast('Have Problem');
+                  }
+                });
+
 
                 }
 }
