@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "597089789799",
+    "firebase_url": "https://armrci2.firebaseio.com",
+    "project_id": "armrci2",
+    "storage_bucket": "armrci2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597089789799:android:3319e7005d32290720b1c2",
+        "android_client_info": {
+          "package_name": "com.rcithailand.armrci"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "597089789799-t88d2ud9bqv9n7v218tlt5u2i1meh886.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMJZu_0G-5NW3dK452VQSo3Vd1P-_gEwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "597089789799-t88d2ud9bqv9n7v218tlt5u2i1meh886.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

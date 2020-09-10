@@ -5,6 +5,7 @@ import 'package:armrci/page/show_cart.dart';
 import 'package:armrci/page/show_menu_shop.dart';
 import 'package:armrci/utility/my_constant.dart';
 import 'package:armrci/utility/my_style.dart';
+import 'package:armrci/widget/read_barcode.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,13 +66,15 @@ class _MainUserState extends State<MainUser> {
               children: <Widget>[
                 showHead(),
                 buildCart(),
+                buildReadBarcode(),
               ],
             ),
             MyStyle().menuSignOut(context),
           ],
         ),
       ),
-      appBar: AppBar(actions: <Widget>[MyStyle().showChart(context)],
+      appBar: AppBar(
+        actions: <Widget>[MyStyle().showChart(context)],
         title: Text('Welcome User'),
       ),
       body: userModels.length == 0 ? MyStyle().showProgress() : buildShop(),
@@ -93,6 +96,25 @@ class _MainUserState extends State<MainUser> {
         ),
         title: Text('ตะกร้าของฉัน'),
         subtitle: Text('แสดงสินค้าที่เราจะ Order'),
+      );
+
+  ListTile buildReadBarcode() => ListTile(
+        onTap: () {
+          Navigator.pop(context);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ReadBarcode(),
+            ),
+          );
+        },
+        leading: Icon(
+          Icons.android,
+          size: 36,
+          color: Colors.green,
+        ),
+        title: Text('Read Barcode'),
+        subtitle: Text('อ่านบาร์โค้ด'),
       );
 
   UserAccountsDrawerHeader showHead() {

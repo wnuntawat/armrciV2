@@ -81,7 +81,7 @@ class MyStyle {
         child: Text(
           string,
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 15,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),

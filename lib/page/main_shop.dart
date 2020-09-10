@@ -1,5 +1,8 @@
+import 'package:armrci/page/show_cart.dart';
 import 'package:armrci/utility/my_style.dart';
 import 'package:armrci/widget/show_info_shop.dart';
+import 'package:armrci/widget/show_chart_sales.dart';
+import 'package:armrci/widget/show_line_chart.dart';
 import 'package:armrci/widget/show_my_order_shop.dart';
 import 'package:armrci/widget/show_my_product.dart';
 import 'package:flutter/material.dart';
@@ -43,13 +46,17 @@ Future<Null> findShop() async{
     return Drawer(
       child: Stack(
         children: <Widget>[
-          Column(
-            children: <Widget>[
-              UserAccountsDrawerHeader(accountName: null, accountEmail: null),
-              menuMyorder(),
-              menuMyProduct(),
-              menuMyInformation(),
-            ],
+          SingleChildScrollView( 
+                      child: Column(
+              children: <Widget>[
+                UserAccountsDrawerHeader(accountName: null, accountEmail: null),
+                menuMyorder(),
+                menuMyProduct(),
+                menuMyInformation(),
+                menuMyChart(),
+                menuMyChartSales(),
+              ],
+            ),
           ),MyStyle().menuSignOut(context),
         ],
       ),
@@ -88,6 +95,32 @@ Future<Null> findShop() async{
           Navigator.pop(context);
           setState(() {
             currentwidget = ShowInfoShop(idShop:idShop,);
+          });
+        },
+      );
+
+
+      ListTile menuMyChart() => ListTile(
+        leading: Icon(Icons.looks_3),
+        title: Text('Show My Chart'),
+        subtitle: Text('ดูกราฟ'),
+        onTap: () {
+          Navigator.pop(context);
+          setState(() {
+            currentwidget = ShowLineChart();
+          });
+        },
+      );
+
+
+       ListTile menuMyChartSales() => ListTile(
+        leading: Icon(Icons.looks_5),
+        title: Text('Show My Chart Sale'),
+        subtitle: Text('ดูกราฟ Sale'),
+        onTap: () {
+          Navigator.pop(context);
+          setState(() {
+             currentwidget = ShowChartSales();
           });
         },
       );
