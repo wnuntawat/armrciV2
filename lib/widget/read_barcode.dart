@@ -83,7 +83,7 @@ class _ReadBarcodeState extends State<ReadBarcode> {
     try {
       var result = await BarcodeScanner.scan();
       barcodeString = result.rawContent;
-      // print('barcode===>$barcodeString');
+      print('barcode===>$barcodeString');
 
       if (barcodeString.length == 20) {
         decodeBarCode();

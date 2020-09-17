@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:armrci/models/user_model.dart';
 import 'package:armrci/page/main_shop.dart';
 import 'package:armrci/page/main_user.dart';
+import 'package:armrci/page/no_internet.dart';
 import 'package:armrci/page/register.dart';
 import 'package:armrci/utility/my_api.dart';
+import 'package:armrci/utility/my_constant.dart';
 import 'package:armrci/utility/my_style.dart';
 import 'package:armrci/utility/normal_dialog.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +25,7 @@ class _AuthenState extends State<Authen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    checkInternet();
     findLogin();
   }
 
@@ -36,11 +41,11 @@ class _AuthenState extends State<Authen> {
     } else {
       switch (typeLogin) {
         case 'User':
-        print('work');
+          print('work');
           routeToService(MainUser());
           break;
         case 'Shop':
-         routeToService(MainShop());
+          routeToService(MainShop());
           break;
         default:
       }
@@ -48,7 +53,7 @@ class _AuthenState extends State<Authen> {
   }
 
   void routeToService(Widget widget) {
-     MaterialPageRoute route = MaterialPageRoute(
+    MaterialPageRoute route = MaterialPageRoute(
       builder: (context) => widget,
     );
     Navigator.pushAndRemoveUntil(context, route, (route) => false);
@@ -167,5 +172,21 @@ class _AuthenState extends State<Authen> {
       builder: (context) => widget,
     );
     Navigator.pushAndRemoveUntil(context, route, (route) => false);
+  }
+
+  Future<Null> checkInternet() async {
+    try {
+      var response = await InternetAddress.lookup('google.com');
+      if ((response.isNotEmpty) && (response[0].rawAddress.isNotEmpty)) {
+        findLogin();
+      }
+    } catch (e) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NoInternet(),
+          ),
+          (route) => false);
+    }
   }
 }

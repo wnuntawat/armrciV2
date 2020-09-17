@@ -5,6 +5,8 @@ import 'package:armrci/page/show_cart.dart';
 import 'package:armrci/page/show_menu_shop.dart';
 import 'package:armrci/utility/my_constant.dart';
 import 'package:armrci/utility/my_style.dart';
+import 'package:armrci/widget/dowmload_file.dart';
+import 'package:armrci/widget/generate_qrcode.dart';
 import 'package:armrci/widget/read_barcode.dart';
 import 'package:armrci/widget/show_chart.dart';
 import 'package:armrci/widget/show_location.dart';
@@ -63,13 +65,15 @@ class _MainUserState extends State<MainUser> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
-        child: Stack(
+        child: ListView(
           children: <Widget>[
             Column(
               children: <Widget>[
                 showHead(),
                 buildShowChart(),
                 buildShowLocation(),
+                buildShowDownloadFile(),
+                buildShowGenQrcode(),
                 buildCart(),
                 buildReadBarcode(),
               ],
@@ -113,6 +117,33 @@ class _MainUserState extends State<MainUser> {
           color: Colors.brown,
         ),title: Text('แสดงพิกัด'),subtitle: Text(' Show ALL User Location '),
       );
+
+ ListTile buildShowDownloadFile() => ListTile(onTap: () {
+    setState(() {
+       Navigator.pop(context);
+       currentWidget= DownloadFile();
+    });
+  },
+        leading: Icon(
+          Icons.cloud_download,
+          size: 36,
+          color: Colors.pink,
+        ),title: Text('Download File'),subtitle: Text(' Show File Download '),
+      );
+
+ListTile buildShowGenQrcode() => ListTile(onTap: () {
+    setState(() {
+       Navigator.pop(context);
+       currentWidget= GenerateQrcode();
+    });
+  },
+        leading: Icon(
+          Icons.crop_landscape,
+          size: 36,
+          color: Colors.orange,
+        ),title: Text('Generate QRcode'),subtitle: Text(' สร้าง QRcode '),
+      );
+
 
 
 
